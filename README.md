@@ -1,5 +1,5 @@
 # infimnist_py
-Python binding for the infinite MNIST dataset generator of L. Bottou (see http://leon.bottou.org/projects/infimnist), written in Cython
+Python binding for the infinite MNIST dataset generator of L. Bottou (see http://leon.bottou.org/projects/infimnist), written in Cython. A tensorflow queue for real-time data generation is also provided in `infimnist_queue.py`.
 
 # Installation
 
