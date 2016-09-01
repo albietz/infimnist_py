@@ -54,6 +54,8 @@ class InfimnistProducer(object):
                                      size=self.gen_batch_size, dtype=np.int64)
             digits, labels = self.mnist.gen(idxs)
 
+            if coord is not None and coord.should_stop():
+                break
             try:
                 sess.run(self.enqueue_op,
                          feed_dict={self.indexes_placeholder: idxs,
@@ -66,10 +68,13 @@ class InfimnistProducer(object):
         self.gen_thread = threading.Thread(target=self.gen_digits, args=(sess, coord))
         self.gen_thread.start()
 
-    def join(self, sess):
-        sess.run(self.q.close(cancel_pending_enqueues=True))
+    def join(self, sess, coord=None):
+        # sess.run(self.q.close(cancel_pending_enqueues=True))
         if self.gen_thread:
-            self.gen_thread.join()
+            if coord is None:
+                self.gen_thread.join()
+            else:
+                coord.join([self.gen_thread])
 
 
 if __name__ == '__main__':
@@ -84,4 +89,4 @@ if __name__ == '__main__':
         print(indexes.shape, digits.shape, labels.shape)
 
     coord.request_stop()
-    data.join(sess)
+    data.join(sess, coord)
