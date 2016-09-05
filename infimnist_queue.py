@@ -66,10 +66,11 @@ class InfimnistProducer(object):
 
     def start_queue(self, sess, coord=None):
         self.gen_thread = threading.Thread(target=self.gen_digits, args=(sess, coord))
+        self.gen_thread.daemon = True
         self.gen_thread.start()
 
     def join(self, sess, coord=None):
-        # sess.run(self.q.close(cancel_pending_enqueues=True))
+        sess.run(self.q.close(cancel_pending_enqueues=True))
         if self.gen_thread:
             if coord is None:
                 self.gen_thread.join()
