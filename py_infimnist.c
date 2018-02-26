@@ -18,8 +18,8 @@ void get_digits(char* const out_digits, const size_t out_digits_size,
                 char* const out_labels, const size_t out_labels_size,
                 infimnist_t* p,
                 const int64_t* const indexes, const size_t num_digits) {
-  FILE* d_stream = fmemopen((void*)out_digits, out_digits_size, "wb");
-  FILE* l_stream = fmemopen((void*)out_labels, out_labels_size, "wb");
+  FILE* d_stream = fmemopen((void*)out_digits, out_digits_size + 1, "wb");
+  FILE* l_stream = fmemopen((void*)out_labels, out_labels_size + 1, "wb");
 
   // uncomment for adding headers
   /*

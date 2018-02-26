@@ -45,7 +45,7 @@ typedef struct infimnist_s infimnist_t;
    containing the data files. Setting it to NULL implicitly selects the
    directory named "data" in the current directory. */
 
-infimnist_t *infimnist_create(const char *datadir);
+infimnist_t *infimnist_create(const char *datadir, const float alpha, const int translate);
 
 /* Function <infimnist_destroy> destroys the data structure 
    and returns its memory to the heap. */

@@ -12,7 +12,7 @@ np.import_array()
 cdef extern from "infimnist.h":
     ctypedef struct infimnist_t
 
-    infimnist_t* infimnist_create(const char*)
+    infimnist_t* infimnist_create(const char*, const float, const int)
     void infimnist_destroy(infimnist_t*)
 
 cdef extern from "py_infimnist.h":
@@ -22,11 +22,11 @@ cdef extern from "py_infimnist.h":
 cdef class InfimnistGenerator:
     cdef infimnist_t* p
 
-    def __init__(self):
+    def __init__(self, alpha=1.0, translate=True):
         # specify data path here
         data_path = os.path.join(os.path.dirname(__file__), 'data')
         cdef char* dirname = data_path
-        self.p = infimnist_create(dirname)
+        self.p = infimnist_create(dirname, alpha, 1 if translate else 0)
 
     def __dealloc__(self):
         infimnist_destroy(self.p)

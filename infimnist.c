@@ -67,6 +67,7 @@ struct infimnist_s
   float (*tangent)[NTAN][EXSIZE];   /* T[0]...T[2*nb_train-1] */
   float *y; 			    /* category */
   float alpha;
+  int translate;
   long  count;
   long (*cachekeys)[CACHECOLS];
   unsigned char* (*cacheptr)[CACHECOLS];
@@ -125,7 +126,7 @@ load_ubyte_dataset(const char *dir, const char *file, int nbp, int s, int bla, f
 }
 
 infimnist_t *
-infimnist_create(const char *dirname)
+infimnist_create(const char *dirname, const float alpha, const int translate)
 {
   int i,j;
   infimnist_t *p;
@@ -148,8 +149,9 @@ infimnist_create(const char *dirname)
   load_ubyte_dataset(dir, TRAIN_LABELS, TRAINNUM, 1, 8, &p->y[TESTNUM]);
   load_float_dataset(dir, DEFORM_FIELDS, FIELDNUM, EXSIZE, 0, &p->fields[0][0]);
   load_float_dataset(dir, TRAIN_TANGENTS, TRAINNUM*NTAN, EXSIZE, 0, &p->tangent[0][0][0]);
-  p->alpha = 1.00;
+  p->alpha = alpha;
   p->count = 0;
+  p->translate = translate;
   for (i=0; i<CACHEROWS; i++)
     for (j=0; j<CACHECOLS; j++)
       {
@@ -300,7 +302,11 @@ compute_transformed_vector(infimnist_t *p, long i)
       else
         s[j] = (unsigned char)(int)x;
     }
-  return translation(s, k1 % 9);
+  if (p->translate) {
+    return translation(s, k1 % 9);
+  } else {
+    return s;
+  }
 }
 
 
